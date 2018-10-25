@@ -35,11 +35,7 @@ def _build_ac_automation(keys: List[str]) -> Any:
     return atm
 
 
-def _meta_mark_sentence_endings(
-        text: str,
-        ac_automation: Any,
-) -> List[bool]:
-
+def _meta_mark_sentence_endings(text: str, ac_automation: Any) -> List[bool]:
     marks = [False] * len(text)
     for end, (_, key) in ac_automation.iter(text):
         end += 1
