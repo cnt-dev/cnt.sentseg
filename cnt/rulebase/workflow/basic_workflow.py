@@ -37,8 +37,7 @@ class BasicLabelProcessor:
         one or more :class:`BasicSequentialLabeler`.
     """
 
-    def __init__(self, input_sequence: str,
-                 index_labels_generator: IndexLabelsGeneratorType):
+    def __init__(self, input_sequence: str, index_labels_generator: IndexLabelsGeneratorType):
         self.input_sequence = input_sequence
         self.index_labels_generator = index_labels_generator
 
