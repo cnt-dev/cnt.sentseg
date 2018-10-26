@@ -1,7 +1,7 @@
 """
 Basic Workflow.
 """
-from typing import Iterable, Type, Generator, Any, Dict, Tuple
+from typing import Type, Generator, Any, Dict, Tuple, Iterable
 
 
 class BasicSequentialLabeler:
@@ -84,7 +84,7 @@ class BasicWorkflow:
     def __init__(self, sequential_labeler_classes: Iterable[Type[BasicSequentialLabeler]],
                  label_processor_class: Type[BasicLabelProcessor],
                  output_generator_class: Type[BasicOutputGenerator]):
-        self.sequential_labeler_classes = sequential_labeler_classes
+        self.sequential_labeler_classes = tuple(sequential_labeler_classes)
         self.label_processor_class = label_processor_class
         self.output_generator_class = output_generator_class
 
@@ -94,4 +94,16 @@ class BasicWorkflow:
 
         :param input_sequence: The input sequence.
         """
-        pass
+        # Step 1.
+        sequential_labelers = [sl_cls(input_sequence) for sl_cls in self.sequential_labeler_classes]
+        index_labels_generator = ((index, {
+                type(labeler): labeler.label(index) for labeler in sequential_labelers
+        }) for index in range(len(input_sequence)))
+
+        # Step 2.
+        label_processor = self.label_processor_class(input_sequence, index_labels_generator)
+        label_processor_result = label_processor.result()
+
+        # Step 3.
+        output_generator = self.output_generator_class(input_sequence, label_processor_result)
+        return output_generator.result()
