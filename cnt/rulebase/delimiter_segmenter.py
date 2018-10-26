@@ -4,9 +4,9 @@ from typing import List, Tuple
 from cnt.rulebase import const, utils, segmenter_common
 
 SEGMENT_RANGES = utils.sorted_chain(
-        const.CHINESE_CHARS,
-        const.ENGLISH_CHARS,
-        const.DIGITS,
+        const.RG_CHINESE_CHARS,
+        const.RG_ENGLISH_CHARS,
+        const.RG_DIGITS,
 )
 
 

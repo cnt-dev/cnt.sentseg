@@ -3,7 +3,7 @@ import cnt.rulebase.sentence_segmenter as sentseg
 
 
 def test_sentseg_ends():
-    assert len(const.SENTENCE_ENDS) == len(set(const.SENTENCE_ENDS))
+    assert len(const.EM_SENTENCE_ENDINGS) == len(set(const.EM_SENTENCE_ENDINGS))
 
 
 def test_sentseg():

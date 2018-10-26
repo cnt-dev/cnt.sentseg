@@ -1,13 +1,19 @@
 cnt.rulebase package
 ====================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    cnt.rulebase.const
+
 Submodules
 ----------
 
 .. toctree::
 
    cnt.rulebase.char_replacer
-   cnt.rulebase.const
    cnt.rulebase.delimiter_segmenter
    cnt.rulebase.segmenter_common
    cnt.rulebase.sentence_segmenter

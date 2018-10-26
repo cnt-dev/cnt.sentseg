@@ -1,10 +1,16 @@
 """
-All consts.
+All consts for rule-based tasks.
+
+Naming patterns:
+
+* `EM_*`: Exact match lists.
+* `RG_*`: Range-based lists.
+* `RE_*`: Regular expression lists.
 """
 
-from cnt.rulebase.const.sentence_endings import SENTENCE_ENDS
+from cnt.rulebase.const.sentence_endings import EM_SENTENCE_ENDINGS
 
-from cnt.rulebase.const.chinese_chars import CHINESE_CHARS
-from cnt.rulebase.const.english_chars import ENGLISH_CHARS
-from cnt.rulebase.const.digits import DIGITS
-from cnt.rulebase.const.delimiters import DELIMITERS
+from cnt.rulebase.const.chinese_chars import RG_CHINESE_CHARS
+from cnt.rulebase.const.english_chars import RG_ENGLISH_CHARS
+from cnt.rulebase.const.digits import RG_DIGITS
+from cnt.rulebase.const.delimiters import RG_DELIMITERS

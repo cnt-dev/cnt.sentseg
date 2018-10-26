@@ -21,7 +21,7 @@ def _generate_replacer(sorted_ranges: List[Tuple[int, int]]) -> Callable[[str, s
 
 
 # pylint: disable=invalid-name
-replace_chinese_chars = _generate_replacer(const.CHINESE_CHARS)
-replace_english_chars = _generate_replacer(const.ENGLISH_CHARS)
-replace_digits = _generate_replacer(const.DIGITS)
-replace_delimiters = _generate_replacer(const.DELIMITERS)
+replace_chinese_chars = _generate_replacer(const.RG_CHINESE_CHARS)
+replace_english_chars = _generate_replacer(const.RG_ENGLISH_CHARS)
+replace_digits = _generate_replacer(const.RG_DIGITS)
+replace_delimiters = _generate_replacer(const.RG_DELIMITERS)

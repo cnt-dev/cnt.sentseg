@@ -64,4 +64,4 @@ def _generate_sentence_ends() -> List[str]:
 
 
 #: For detecting sentence endings.
-SENTENCE_ENDS = _generate_sentence_ends()
+EM_SENTENCE_ENDINGS = _generate_sentence_ends()

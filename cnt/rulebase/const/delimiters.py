@@ -4,7 +4,7 @@ Consts for detecting delimiter chars.
 from cnt.rulebase import utils
 
 #: Delimiters.
-DELIMITERS = utils.sorted_chain(
+RG_DELIMITERS = utils.sorted_chain(
         # ASCII_DELIMITERS_RANGES
         [
                 (0x0021, 0x002F),

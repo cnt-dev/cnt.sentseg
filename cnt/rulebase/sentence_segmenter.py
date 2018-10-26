@@ -7,10 +7,10 @@ import ahocorasick
 from cnt.rulebase import const, utils, segmenter_common
 
 SENTSEG_RANGES = utils.sorted_chain(
-        const.CHINESE_CHARS,
-        const.ENGLISH_CHARS,
-        const.DIGITS,
-        const.DELIMITERS,
+        const.RG_CHINESE_CHARS,
+        const.RG_ENGLISH_CHARS,
+        const.RG_DIGITS,
+        const.RG_DELIMITERS,
 )
 
 _WHITESPACE_PATTERN = re.compile(r'\s+')
@@ -44,14 +44,14 @@ def _meta_mark_sentence_endings(text: str, ac_automation: Any) -> List[bool]:
     return marks
 
 
-AC_AUTOMATION = _build_ac_automation(const.SENTENCE_ENDS)
+AC_AUTOMATION = _build_ac_automation(const.EM_SENTENCE_ENDINGS)
 
 
 def _mark_sentence_endings(text: str) -> List[bool]:
     return _meta_mark_sentence_endings(text, AC_AUTOMATION)
 
 
-AC_AUTOMATION_WITH_COMMA = _build_ac_automation(const.SENTENCE_ENDS +
+AC_AUTOMATION_WITH_COMMA = _build_ac_automation(const.EM_SENTENCE_ENDINGS +
                                                 [chr(0xFF0C), chr(0x201A), ','])
 
 
