@@ -38,11 +38,7 @@ def _match_ac_automation(text: str, ac_automation: Any) -> Generator[Tuple[int, 
 
 
 class SentenceEndingLabeler(workflow.BasicSequentialLabeler):
-    pass
-    # AC_AUTOMATION = _build_ac_automation(const.EM_SENTENCE_ENDINGS)
+    AC_AUTOMATION = _build_ac_automation(const.EM_SENTENCE_ENDINGS)
 
-    # def __init__(self, input_sequence: str):
-    #     super().__init__(input_sequence)
-
-    # def label(self, index: int) -> bool:
-    #     pass
+    def label(self, index: int) -> bool:
+        pass
