@@ -1,4 +1,4 @@
-import cnt.rulebase.const as const
+from cnt.rulebase import const
 import cnt.rulebase.sentence_segmenter as sentseg
 
 

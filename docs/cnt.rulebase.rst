@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     cnt.rulebase.const
+    cnt.rulebase.workflow
 
 Submodules
 ----------
