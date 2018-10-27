@@ -1,7 +1,7 @@
 """
 Basic Workflow.
 """
-from typing import Type, Generator, Any, Dict, Tuple, Iterable
+from typing import Type, Generator, Any, Optional, Dict, Tuple, Iterable
 
 
 class BasicSequentialLabeler:
@@ -24,8 +24,16 @@ class BasicSequentialLabeler:
         raise NotImplementedError()
 
 
-IndexLabelsType = Tuple[int, Dict[Type[BasicSequentialLabeler], bool]]
+LabelsType = Dict[Type[BasicSequentialLabeler], bool]
+IndexLabelsType = Tuple[int, LabelsType]
 IndexLabelsGeneratorType = Generator[IndexLabelsType, None, None]
+
+
+class BasicConfig:
+    """
+    Configuration could be accessed by LabelProcessor and OutputGenerator.
+    """
+    pass
 
 
 class BasicLabelProcessor:
@@ -37,9 +45,11 @@ class BasicLabelProcessor:
         one or more :class:`BasicSequentialLabeler`.
     """
 
-    def __init__(self, input_sequence: str, index_labels_generator: IndexLabelsGeneratorType):
+    def __init__(self, input_sequence: str, index_labels_generator: IndexLabelsGeneratorType,
+                 config: Optional[BasicConfig]):
         self.input_sequence = input_sequence
         self.index_labels_generator = index_labels_generator
+        self.config = config
 
     def result(self) -> Any:
         """
@@ -57,9 +67,11 @@ class BasicOutputGenerator:
     :param label_processor_result: The result of :class:`BasicLabelProcessor`.
     """
 
-    def __init__(self, input_sequence: str, label_processor_result: Any):
+    def __init__(self, input_sequence: str, label_processor_result: Any,
+                 config: Optional[BasicConfig]):
         self.input_sequence = input_sequence
         self.label_processor_result = label_processor_result
+        self.config = config
 
     def result(self) -> Any:
         """
@@ -81,12 +93,15 @@ class BasicWorkflow:
     :param output_generator_class: Generate output based on input sequence & labels.
     """
 
-    def __init__(self, sequential_labeler_classes: Iterable[Type[BasicSequentialLabeler]],
+    def __init__(self,
+                 sequential_labeler_classes: Iterable[Type[BasicSequentialLabeler]],
                  label_processor_class: Type[BasicLabelProcessor],
-                 output_generator_class: Type[BasicOutputGenerator]):
+                 output_generator_class: Type[BasicOutputGenerator],
+                 config: Optional[BasicConfig] = None):
         self.sequential_labeler_classes = tuple(sequential_labeler_classes)
         self.label_processor_class = label_processor_class
         self.output_generator_class = output_generator_class
+        self.config = config
 
     def result(self, input_sequence: str) -> Any:
         """
@@ -101,9 +116,11 @@ class BasicWorkflow:
         }) for index in range(len(input_sequence)))
 
         # Step 2.
-        label_processor = self.label_processor_class(input_sequence, index_labels_generator)
+        label_processor = self.label_processor_class(input_sequence, index_labels_generator,
+                                                     self.config)
         label_processor_result = label_processor.result()
 
         # Step 3.
-        output_generator = self.output_generator_class(input_sequence, label_processor_result)
+        output_generator = self.output_generator_class(input_sequence, label_processor_result,
+                                                       self.config)
         return output_generator.result()

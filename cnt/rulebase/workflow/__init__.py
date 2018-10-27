@@ -6,5 +6,8 @@ from cnt.rulebase.workflow.basic_workflow import (
         BasicSequentialLabeler,
         BasicLabelProcessor,
         BasicOutputGenerator,
+        BasicConfig,
         BasicWorkflow,
+        LabelsType,
+        IndexLabelsType,
 )
