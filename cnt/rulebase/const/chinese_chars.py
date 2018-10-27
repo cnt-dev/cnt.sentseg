@@ -11,7 +11,7 @@ from cnt.rulebase import utils
 #:
 #:  lines = '''copy paste the table here'''
 #:  [l.split('\t') for l in lines.strip().split('\n')]
-RG_CHINESE_CHARS = utils.sorted_chain([
+ITV_CHINESE_CHARS = utils.sorted_chain([
         (0x4E00, 0x9FA5),
         (0x9FA6, 0x9FEF),
         (0x3400, 0x4DB5),

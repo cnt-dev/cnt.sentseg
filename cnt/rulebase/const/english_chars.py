@@ -4,7 +4,7 @@ Consts for detecting chinese chars.
 from cnt.rulebase import utils
 
 #: English Chars.
-RG_ENGLISH_CHARS = utils.sorted_chain(
+ITV_ENGLISH_CHARS = utils.sorted_chain(
         # ASCII_ALPHA_RANGES
         [
                 (0x0041, 0x005A),

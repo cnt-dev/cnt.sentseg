@@ -7,10 +7,10 @@ import ahocorasick
 from cnt.rulebase import const, utils, segmenter_common
 
 SENTSEG_RANGES = utils.sorted_chain(
-        const.RG_CHINESE_CHARS,
-        const.RG_ENGLISH_CHARS,
-        const.RG_DIGITS,
-        const.RG_DELIMITERS,
+        const.ITV_CHINESE_CHARS,
+        const.ITV_ENGLISH_CHARS,
+        const.ITV_DIGITS,
+        const.ITV_DELIMITERS,
 )
 
 _WHITESPACE_PATTERN = re.compile(r'\s+')

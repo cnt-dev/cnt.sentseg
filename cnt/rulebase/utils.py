@@ -9,9 +9,9 @@ def sorted_chain(*ranges: Iterable[Tuple[int, int]]) -> List[Tuple[int, int]]:
     return sorted(itertools.chain(*ranges))
 
 
-def generate_range_checker(sorted_ranges: List[Tuple[int, int]]) -> Callable[[str], bool]:
+def generate_range_checker(sorted_intervals: List[Tuple[int, int]]) -> Callable[[str], bool]:
     """To check if a char is in ranges."""
-    ranges_start = [t[0] for t in sorted_ranges]
+    ranges_start = [t[0] for t in sorted_intervals]
 
     def _char_in_range(char: str) -> bool:
         code_point = ord(char)
@@ -24,7 +24,7 @@ def generate_range_checker(sorted_ranges: List[Tuple[int, int]]) -> Callable[[st
 
         # 2. check if start <= code_point <= end.
         # (to deal with the coner case when idx == 0).
-        return sorted_ranges[idx][0] <= code_point <= sorted_ranges[idx][1]
+        return sorted_intervals[idx][0] <= code_point <= sorted_intervals[idx][1]
 
     return _char_in_range
 
