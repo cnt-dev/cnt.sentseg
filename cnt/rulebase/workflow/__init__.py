@@ -18,9 +18,5 @@ from cnt.rulebase.workflow.basic_workflow import (
         BasicConfig,
         BasicWorkflow,
 )
-from cnt.rulebase.workflow.interval_labeler import (
-        IntervalLabeler,
-        re_pattern_from_intervals,
-)
-from cnt.rulebase.workflow.exact_match_labeler import (
-        ExactMatchLabeler,)
+from cnt.rulebase.workflow.interval_labeler import IntervalLabeler
+from cnt.rulebase.workflow.exact_match_labeler import ExactMatchLabeler

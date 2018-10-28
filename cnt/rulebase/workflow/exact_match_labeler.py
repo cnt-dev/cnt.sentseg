@@ -46,7 +46,7 @@ class ExactMatchLabeler(IntervalLabeler):
         atm.make_automaton()
         cls.AC_AUTOMATION = atm
 
-    def initialize_intervals(self) -> IntervalGeneratorType:
+    def intervals_generator(self) -> IntervalGeneratorType:
         if self.AC_AUTOMATION is None:
             raise RuntimeError('AC_AUTOMATION is not initialized.')
         return _ac_automation_match(self.input_sequence, self.AC_AUTOMATION)

@@ -40,11 +40,10 @@ class WhitespaceLabeler(workflow.IntervalLabeler):
 
     Time & space complexity: `O(1)`.
     """
+    pass
 
-    WHITESPACE_PATTERN = re.compile(r'\s+')
 
-    def initialize_intervals(self) -> workflow.IntervalGeneratorType:
-        return (match.span() for match in self.WHITESPACE_PATTERN.finditer(self.input_sequence))
+WhitespaceLabeler.initialize_by_regular_expression(r'\s+')
 
 
 class SentenceValidCharacterLabeler(workflow.IntervalLabeler):
@@ -53,13 +52,10 @@ class SentenceValidCharacterLabeler(workflow.IntervalLabeler):
 
     Time & space complexity: `O(1)`.
     """
+    pass
 
-    SENTENCE_VALID_CHARS_PATTERN = workflow.re_pattern_from_intervals(
-            sentseg_const.ITV_SENTENCE_VALID_CHARS)
 
-    def initialize_intervals(self) -> workflow.IntervalGeneratorType:
-        return (match.span()
-                for match in self.SENTENCE_VALID_CHARS_PATTERN.finditer(self.input_sequence))
+SentenceValidCharacterLabeler.initialize_by_intervals(sentseg_const.ITV_SENTENCE_VALID_CHARS)
 
 
 class SentenceSegementationConfig(workflow.BasicConfig):
