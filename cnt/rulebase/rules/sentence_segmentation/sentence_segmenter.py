@@ -1,7 +1,7 @@
 """
 Chinese sentence segmentation.
 """
-from typing import Any, Union, Generator, List, Tuple, cast
+from typing import Any, Union, cast
 
 from cnt.rulebase import workflow
 from cnt.rulebase.rules.sentence_segmentation import const as sentseg_const
@@ -127,15 +127,10 @@ class SentenceSegementationLabelProcessor(workflow.BasicLabelProcessor):
             yield start, end
 
 
-SentenceRetType = Tuple[str, workflow.IntervalType]
-SentSegLazyRetType = Generator[SentenceRetType, None, None]
-SentSegRetType = List[SentenceRetType]
-
-
 # To make type checking happy.
 class _SentenceSegementationOutputGeneratorLazy(workflow.BasicOutputGenerator):
 
-    def _result(self) -> SentSegLazyRetType:
+    def _result(self) -> workflow.CommonOutputLazyType:
         return ((self.input_sequence[start:end], (start, end))
                 for start, end in self.label_processor_result)
 
@@ -145,13 +140,13 @@ class _SentenceSegementationOutputGeneratorLazy(workflow.BasicOutputGenerator):
 
 class SentenceSegementationOutputGeneratorLazy(_SentenceSegementationOutputGeneratorLazy):
 
-    def result(self) -> SentSegLazyRetType:
+    def result(self) -> workflow.CommonOutputLazyType:
         return self._result()
 
 
 class SentenceSegementationOutputGenerator(_SentenceSegementationOutputGeneratorLazy):
 
-    def result(self) -> SentSegRetType:
+    def result(self) -> workflow.CommonOutputType:
         return list(self._result())
 
 
@@ -177,15 +172,17 @@ SENTSEG_WORKFLOW_LAZY = _generate_sentseg_workflow(lazy=True)
 SENTSEG_WORKFLOW = _generate_sentseg_workflow(lazy=False)
 
 
-def _sentseg(sentseg_workflow: workflow.BasicWorkflow, text: str,
-             enable_comma_ending: bool = False) -> Union[SentSegLazyRetType, SentSegRetType]:
+def _sentseg(sentseg_workflow: workflow.BasicWorkflow, text: str, enable_comma_ending: bool = False
+            ) -> Union[workflow.CommonOutputLazyType, workflow.CommonOutputType]:
     config = SentenceSegementationConfig(enable_comma_ending=enable_comma_ending)
-    return cast(Union[SentSegLazyRetType, SentSegRetType], sentseg_workflow.result(text, config))
+    return cast(Union[workflow.CommonOutputLazyType, workflow.CommonOutputType],
+                sentseg_workflow.result(text, config))
 
 
-def sentseg(text: str, enable_comma_ending: bool = False) -> SentSegRetType:
-    return cast(SentSegRetType, _sentseg(SENTSEG_WORKFLOW, text, enable_comma_ending))
+def sentseg(text: str, enable_comma_ending: bool = False) -> workflow.CommonOutputType:
+    return cast(workflow.CommonOutputType, _sentseg(SENTSEG_WORKFLOW, text, enable_comma_ending))
 
 
-def sentseg_lazy(text: str, enable_comma_ending: bool = False) -> SentSegLazyRetType:
-    return cast(SentSegLazyRetType, _sentseg(SENTSEG_WORKFLOW_LAZY, text, enable_comma_ending))
+def sentseg_lazy(text: str, enable_comma_ending: bool = False) -> workflow.CommonOutputLazyType:
+    return cast(workflow.CommonOutputLazyType,
+                _sentseg(SENTSEG_WORKFLOW_LAZY, text, enable_comma_ending))

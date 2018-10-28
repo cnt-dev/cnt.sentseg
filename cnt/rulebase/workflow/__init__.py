@@ -5,6 +5,9 @@ Classes to define rule-based processing workflow.
 from cnt.rulebase.workflow.type_annotations import (
         IntervalType,
         IntervalGeneratorType,
+        CommonSentenceType,
+        CommonOutputLazyType,
+        CommonOutputType,
 )
 from cnt.rulebase.workflow.basic_workflow import (
         LabelsType,

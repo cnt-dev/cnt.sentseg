@@ -1,6 +1,14 @@
 cnt.rulebase.rules.interval\_based\_operations package
 ======================================================
 
+Submodules
+----------
+
+.. toctree::
+
+   cnt.rulebase.rules.interval_based_operations.interval_based_collector
+   cnt.rulebase.rules.interval_based_operations.interval_based_replacer
+
 Module contents
 ---------------
 

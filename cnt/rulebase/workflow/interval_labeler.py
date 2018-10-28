@@ -1,4 +1,5 @@
 from typing import List, Optional
+from typing import re as BuiltInReType
 import re
 
 from cnt.rulebase.workflow.basic_workflow import BasicSequentialLabeler
@@ -12,6 +13,20 @@ def _next_interval(intervals: IntervalGeneratorType) -> Optional[IntervalType]:
         return None
 
 
+def build_re_pattern_from_intervals(intervals: List[IntervalType]) -> BuiltInReType:
+    """
+    Convert intervals to regular expression pattern.
+
+    :param intervals: Unicode codepoint intervals.
+    """
+
+    inner = [f'{chr(lb)}-{chr(ub)}' for lb, ub in intervals]
+    joined_inner = ''.join(inner)
+    pattern = f'[{joined_inner}]+'
+
+    return re.compile(pattern, re.UNICODE)
+
+
 class IntervalLabeler(BasicSequentialLabeler):
     """
     Helper to label intervals.
@@ -19,7 +34,7 @@ class IntervalLabeler(BasicSequentialLabeler):
     :param input_sequence: The input sequence.
     """
 
-    ITV_RE_PATTERN = None
+    ITV_RE_PATTERN: Optional[BuiltInReType] = None
 
     @classmethod
     def initialize_by_regular_expression(cls, pattern: str) -> None:
@@ -32,12 +47,7 @@ class IntervalLabeler(BasicSequentialLabeler):
 
         :param intervals: Unicode codepoint intervals.
         """
-
-        inner = [f'{chr(lb)}-{chr(ub)}' for lb, ub in intervals]
-        joined_inner = ''.join(inner)
-        pattern = f'[{joined_inner}]+'
-
-        cls.initialize_by_regular_expression(pattern)
+        cls.ITV_RE_PATTERN = build_re_pattern_from_intervals(intervals)
 
     def __init__(self, input_sequence: str):
         super().__init__(input_sequence)
