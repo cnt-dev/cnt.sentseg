@@ -183,4 +183,4 @@ def sentseg(text: str, enable_comma_ending: bool = False) -> SentSegRetType:
 
 
 def sentseg_lazy(text: str, enable_comma_ending: bool = False) -> SentSegLazyRetType:
-    return _sentseg(SENTSEG_WORKFLOW, text, enable_comma_ending)
+    return _sentseg(SENTSEG_WORKFLOW_LAZY, text, enable_comma_ending)

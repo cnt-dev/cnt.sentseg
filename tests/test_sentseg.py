@@ -1,8 +1,11 @@
+from typing import Generator
+
 from cnt.rulebase.rules.sentence_segmentation.sentence_segmenter import (
         SentenceEndingLabeler,
         WhitespaceLabeler,
         SentenceValidCharacterLabeler,
         sentseg,
+        sentseg_lazy,
 )
 
 
@@ -76,3 +79,8 @@ def test_sentseg():
 
     text = ('a,b，c‚d')
     assert 4 == len(sentseg(text, enable_comma_ending=True))
+
+
+def test_sentseg_lazy():
+    text = ''
+    assert isinstance(sentseg_lazy(text), Generator)
