@@ -1,7 +1,7 @@
 """
 Chinese sentence segmentation.
 """
-from typing import Union, Generator, List, Tuple
+from typing import Any, Union, Generator, List, Tuple, cast
 import re
 
 from cnt.rulebase import workflow
@@ -71,8 +71,8 @@ class SentenceSegementationConfig(workflow.BasicConfig):
 class SentenceSegementationLabelProcessor(workflow.BasicLabelProcessor):
 
     def _labels_indicate_sentence_ending(self, labels: workflow.LabelsType) -> bool:
-        return labels[SentenceEndingLabeler] or (self.config.enable_comma_ending and
-                                                 labels[CommaLabeler])
+        return bool(labels[SentenceEndingLabeler] or
+                    (self.config.enable_comma_ending and labels[CommaLabeler]))
 
     def result(self) -> workflow.IntervalGeneratorType:
         """
@@ -137,17 +137,27 @@ SentSegLazyRetType = Generator[SentenceRetType, None, None]
 SentSegRetType = List[SentenceRetType]
 
 
-class SentenceSegementationOutputGeneratorLazy(workflow.BasicOutputGenerator):
+# To make type checking happy.
+class _SentenceSegementationOutputGeneratorLazy(workflow.BasicOutputGenerator):
 
-    def result(self) -> SentSegLazyRetType:
+    def _result(self) -> SentSegLazyRetType:
         return ((self.input_sequence[start:end], (start, end))
                 for start, end in self.label_processor_result)
 
+    def result(self) -> Any:
+        raise NotImplementedError()
 
-class SentenceSegementationOutputGenerator(SentenceSegementationOutputGeneratorLazy):
+
+class SentenceSegementationOutputGeneratorLazy(_SentenceSegementationOutputGeneratorLazy):
+
+    def result(self) -> SentSegLazyRetType:
+        return self._result()
+
+
+class SentenceSegementationOutputGenerator(_SentenceSegementationOutputGeneratorLazy):
 
     def result(self) -> SentSegRetType:
-        return list(super().result())
+        return list(self._result())
 
 
 def _generate_sentseg_workflow(lazy: bool) -> workflow.BasicWorkflow:
@@ -175,12 +185,12 @@ SENTSEG_WORKFLOW = _generate_sentseg_workflow(lazy=False)
 def _sentseg(sentseg_workflow: workflow.BasicWorkflow, text: str,
              enable_comma_ending: bool = False) -> Union[SentSegLazyRetType, SentSegRetType]:
     config = SentenceSegementationConfig(enable_comma_ending=enable_comma_ending)
-    return sentseg_workflow.result(text, config)
+    return cast(Union[SentSegLazyRetType, SentSegRetType], sentseg_workflow.result(text, config))
 
 
 def sentseg(text: str, enable_comma_ending: bool = False) -> SentSegRetType:
-    return _sentseg(SENTSEG_WORKFLOW, text, enable_comma_ending)
+    return cast(SentSegRetType, _sentseg(SENTSEG_WORKFLOW, text, enable_comma_ending))
 
 
 def sentseg_lazy(text: str, enable_comma_ending: bool = False) -> SentSegLazyRetType:
-    return _sentseg(SENTSEG_WORKFLOW_LAZY, text, enable_comma_ending)
+    return cast(SentSegLazyRetType, _sentseg(SENTSEG_WORKFLOW_LAZY, text, enable_comma_ending))
