@@ -1,23 +1,12 @@
 """
-TODO
+Chinese sentence segmentation.
 """
-from typing import Union, Any, Generator, List, Tuple, Optional
-from typing import re as BuiltInReType
+from typing import Union, Any, Generator, List, Tuple
 import re
 
 import ahocorasick
 
 from cnt.rulebase import workflow, const, utils
-
-IntervalType = Tuple[int, int]
-IntervalGeneratorType = Generator[IntervalType, None, None]
-
-
-def _next_interval(intervals: IntervalGeneratorType) -> Optional[IntervalType]:
-    try:
-        return next(intervals)
-    except StopIteration:
-        return None
 
 
 def _build_ac_automation(keys: List[str]) -> Any:
@@ -28,7 +17,7 @@ def _build_ac_automation(keys: List[str]) -> Any:
     return atm
 
 
-def _ac_automation_match(text: str, ac_automation: Any) -> IntervalGeneratorType:
+def _ac_automation_match(text: str, ac_automation: Any) -> workflow.IntervalGeneratorType:
     prev_start, prev_end = -1, -1
 
     # ``iter``` will return ``end`` in accending order, see
@@ -53,37 +42,7 @@ def _ac_automation_match(text: str, ac_automation: Any) -> IntervalGeneratorType
         yield (prev_start, prev_end + 1)
 
 
-def _re_pattern_from_sorted_intervals(sorted_intervals: List[IntervalType]) -> BuiltInReType:
-    inner = [f'{chr(lb)}-{chr(ub)}' for lb, ub in sorted_intervals]
-    joined_inner = ''.join(inner)
-    pattern = f'[{joined_inner}]+'
-
-    return re.compile(pattern, re.UNICODE)
-
-
-class IntervalLabeler(workflow.BasicSequentialLabeler):
-
-    def __init__(self, input_sequence: str):
-        super().__init__(input_sequence)
-
-        self.intervals = self.initialize_intervals()
-        self.cur_interval = _next_interval(self.intervals)
-
-    def initialize_intervals(self) -> IntervalGeneratorType:
-        raise NotImplementedError()
-
-    def label(self, index: int) -> bool:
-        if self.cur_interval is None or index < self.cur_interval[0]:
-            return False
-
-        if index < self.cur_interval[1]:
-            return True
-
-        self.cur_interval = _next_interval(self.intervals)
-        return False
-
-
-class SentenceEndingLabeler(IntervalLabeler):
+class SentenceEndingLabeler(workflow.IntervalLabeler):
     """
     Mark sentence endings based on
     :py:const:`cnt.rulebase.const.sentence_endings.EM_SENTENCE_ENDINGS`
@@ -93,7 +52,7 @@ class SentenceEndingLabeler(IntervalLabeler):
 
     AC_AUTOMATION = _build_ac_automation(const.EM_SENTENCE_ENDINGS)
 
-    def initialize_intervals(self) -> IntervalGeneratorType:
+    def initialize_intervals(self) -> workflow.IntervalGeneratorType:
         return _ac_automation_match(self.input_sequence, self.AC_AUTOMATION)
 
 
@@ -110,7 +69,7 @@ class CommaLabeler(workflow.BasicSequentialLabeler):
         return self.input_sequence[index] in self.COMMAS
 
 
-class WhitespaceLabeler(IntervalLabeler):
+class WhitespaceLabeler(workflow.IntervalLabeler):
     """
     Mark unicode whitespace.
 
@@ -119,18 +78,18 @@ class WhitespaceLabeler(IntervalLabeler):
 
     WHITESPACE_PATTERN = re.compile(r'\s+')
 
-    def initialize_intervals(self) -> IntervalGeneratorType:
+    def initialize_intervals(self) -> workflow.IntervalGeneratorType:
         return (match.span() for match in self.WHITESPACE_PATTERN.finditer(self.input_sequence))
 
 
-class SentenceValidCharacterLabeler(IntervalLabeler):
+class SentenceValidCharacterLabeler(workflow.IntervalLabeler):
     """
     Mark valid character of chinese sentence.
 
     Time & space complexity: `O(1)`.
     """
 
-    SENTENCE_VALID_CHARS_PATTERN = _re_pattern_from_sorted_intervals(
+    SENTENCE_VALID_CHARS_PATTERN = workflow.re_pattern_from_intervals(
             utils.sorted_chain(
                     const.ITV_CHINESE_CHARS,
                     const.ITV_ENGLISH_CHARS,
@@ -138,7 +97,7 @@ class SentenceValidCharacterLabeler(IntervalLabeler):
                     const.ITV_DELIMITERS,
             ))
 
-    def initialize_intervals(self) -> IntervalGeneratorType:
+    def initialize_intervals(self) -> workflow.IntervalGeneratorType:
         return (match.span()
                 for match in self.SENTENCE_VALID_CHARS_PATTERN.finditer(self.input_sequence))
 
@@ -155,7 +114,7 @@ class SentenceSegementationLabelProcessor(workflow.BasicLabelProcessor):
         return labels[SentenceEndingLabeler] or (self.config.enable_comma_ending and
                                                  labels[CommaLabeler])
 
-    def result(self) -> IntervalGeneratorType:
+    def result(self) -> workflow.IntervalGeneratorType:
         """
         Generate intervals indicating the valid sentences.
         """
@@ -213,7 +172,7 @@ class SentenceSegementationLabelProcessor(workflow.BasicLabelProcessor):
             yield start, end
 
 
-SentenceRetType = Tuple[str, IntervalType]
+SentenceRetType = Tuple[str, workflow.IntervalType]
 SentSegLazyRetType = Generator[SentenceRetType, None, None]
 SentSegRetType = List[SentenceRetType]
 

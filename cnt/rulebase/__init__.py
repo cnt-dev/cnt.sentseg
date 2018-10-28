@@ -7,18 +7,19 @@ __version__ = '0.6.4'
 
 __all__ = [
         'sentseg',
-        'dlmseg',
-        'replace_chinese_chars',
-        'replace_english_chars',
-        'replace_digits',
-        'replace_delimiters',
+        'sentseg_lazy',
+        # 'dlmseg',
+        # 'replace_chinese_chars',
+        # 'replace_english_chars',
+        # 'replace_digits',
+        # 'replace_delimiters',
 ]
 
 from cnt.rulebase.sentence_segmenter import sentseg, sentseg_lazy
-from cnt.rulebase.delimiter_segmenter import dlmseg
-from cnt.rulebase.char_replacer import (
-        replace_chinese_chars,
-        replace_english_chars,
-        replace_digits,
-        replace_delimiters,
-)
+# from cnt.rulebase.delimiter_segmenter import dlmseg
+# from cnt.rulebase.char_replacer import (
+#         replace_chinese_chars,
+#         replace_english_chars,
+#         replace_digits,
+#         replace_delimiters,
+# )

@@ -7,6 +7,7 @@ Submodules
 .. toctree::
 
    cnt.rulebase.workflow.basic_workflow
+   cnt.rulebase.workflow.interval_labeler
 
 Module contents
 ---------------
