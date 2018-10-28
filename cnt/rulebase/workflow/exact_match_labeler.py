@@ -36,16 +36,15 @@ class ExactMatchLabeler(IntervalLabeler):
     Helper to label exact match strings.
     """
 
-    #: Derived class must initialized this object.
     AC_AUTOMATION: Any = None
 
     @classmethod
-    def build_ac_automation_from_strings(cls, keys: List[str]) -> Any:
+    def build_ac_automation_from_strings(cls, keys: List[str]) -> None:
         atm = ahocorasick.Automaton()  # pylint: disable=c-extension-no-member
         for idx, key in enumerate(keys):
             atm.add_word(key, (idx, key))
         atm.make_automaton()
-        return atm
+        cls.AC_AUTOMATION = atm
 
     def initialize_intervals(self) -> IntervalGeneratorType:
         if self.AC_AUTOMATION is None:

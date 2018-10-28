@@ -18,8 +18,7 @@ class SentenceEndingLabeler(workflow.ExactMatchLabeler):
     pass
 
 
-SentenceEndingLabeler.AC_AUTOMATION = SentenceEndingLabeler.build_ac_automation_from_strings(
-        sentseg_const.EM_SENTENCE_ENDINGS)
+SentenceEndingLabeler.build_ac_automation_from_strings(sentseg_const.EM_SENTENCE_ENDINGS)
 
 
 class CommaLabeler(workflow.BasicSequentialLabeler):
