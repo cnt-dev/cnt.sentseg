@@ -2,7 +2,6 @@
 Chinese sentence segmentation.
 """
 from typing import Any, Union, Generator, List, Tuple, cast
-import re
 
 from cnt.rulebase import workflow
 from cnt.rulebase.rules.sentence_segmentation import const as sentseg_const

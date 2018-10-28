@@ -1,5 +1,4 @@
 from typing import List, Optional
-from typing import re as BuiltInReType
 import re
 
 from cnt.rulebase.workflow.basic_workflow import BasicSequentialLabeler
