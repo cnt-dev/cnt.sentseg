@@ -1,7 +1,7 @@
 """Delimiter segmenter."""
 from typing import List, Tuple
 
-from cnt.rulebase import const, utils, segmenter_common
+from cnt.rulebase import const, segmenter_common
 
 SEGMENT_RANGES = const.sorted_chain(
         const.ITV_CHINESE_CHARS,

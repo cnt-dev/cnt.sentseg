@@ -1,7 +1,6 @@
 """Utils functions (DEPRECATED)"""
-import itertools
 import bisect
-from typing import Iterable, List, Tuple, Callable
+from typing import List, Tuple, Callable
 
 
 def generate_range_checker(sorted_intervals: List[Tuple[int, int]]) -> Callable[[str], bool]:
