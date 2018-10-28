@@ -6,6 +6,7 @@ Subpackages
 
 .. toctree::
 
+    cnt.rulebase.rules.interval_based_operations
     cnt.rulebase.rules.sentence_segmentation
 
 Module contents

@@ -8,8 +8,6 @@ Naming patterns:
 * `RE_*`: List of regular expressions.
 """
 
-from cnt.rulebase.const.sentence_endings import EM_SENTENCE_ENDINGS
-
 from cnt.rulebase.const.chinese_chars import ITV_CHINESE_CHARS
 from cnt.rulebase.const.english_chars import ITV_ENGLISH_CHARS
 from cnt.rulebase.const.digits import ITV_DIGITS

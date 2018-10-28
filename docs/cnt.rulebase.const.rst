@@ -10,7 +10,6 @@ Submodules
    cnt.rulebase.const.delimiters
    cnt.rulebase.const.digits
    cnt.rulebase.const.english_chars
-   cnt.rulebase.const.sentence_endings
    cnt.rulebase.const.utils
 
 Module contents

@@ -1,11 +1,9 @@
-from typing import Generator, List, Tuple, Optional
+from typing import List, Optional
 from typing import re as BuiltInReType
 import re
 
 from cnt.rulebase.workflow.basic_workflow import BasicSequentialLabeler
-
-IntervalType = Tuple[int, int]
-IntervalGeneratorType = Generator[IntervalType, None, None]
+from cnt.rulebase.workflow.type_annotations import IntervalType, IntervalGeneratorType
 
 
 def _next_interval(intervals: IntervalGeneratorType) -> Optional[IntervalType]:
