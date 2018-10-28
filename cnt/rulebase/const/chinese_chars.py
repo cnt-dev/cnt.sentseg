@@ -1,7 +1,7 @@
 """
 Consts for detecting chinese chars.
 """
-from cnt.rulebase import utils
+from cnt.rulebase.const import utils
 
 #: Chinese Chars.
 #: Pulled from https://www.qqxiuzi.cn/zh/hanzi-unicode-bianma.php

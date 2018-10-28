@@ -1,7 +1,7 @@
 """
 Consts for detecting chinese chars.
 """
-from cnt.rulebase import utils
+from cnt.rulebase.const import utils
 
 #: English Chars.
 ITV_ENGLISH_CHARS = utils.sorted_chain(

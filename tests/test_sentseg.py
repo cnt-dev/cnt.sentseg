@@ -1,8 +1,7 @@
-from cnt.rulebase.sentence_segmenter import (
+from cnt.rulebase.rules.sentence_segmentation.sentence_segmenter import (
         SentenceEndingLabeler,
         WhitespaceLabeler,
         SentenceValidCharacterLabeler,
-
         sentseg,
 )
 

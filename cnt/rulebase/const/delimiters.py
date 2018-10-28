@@ -1,7 +1,7 @@
 """
 Consts for detecting delimiter chars.
 """
-from cnt.rulebase import utils
+from cnt.rulebase.const import utils
 
 #: Delimiters.
 ITV_DELIMITERS = utils.sorted_chain(

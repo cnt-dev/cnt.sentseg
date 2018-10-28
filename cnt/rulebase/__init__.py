@@ -15,7 +15,7 @@ __all__ = [
         # 'replace_delimiters',
 ]
 
-from cnt.rulebase.sentence_segmenter import sentseg, sentseg_lazy
+from cnt.rulebase.rules import sentseg, sentseg_lazy
 # from cnt.rulebase.delimiter_segmenter import dlmseg
 # from cnt.rulebase.char_replacer import (
 #         replace_chinese_chars,

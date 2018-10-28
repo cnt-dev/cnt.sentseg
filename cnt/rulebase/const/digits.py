@@ -1,7 +1,7 @@
 """
 Consts for detecting digit chars.
 """
-from cnt.rulebase import utils
+from cnt.rulebase.const import utils
 
 #: Digits.
 ITV_DIGITS = utils.sorted_chain(

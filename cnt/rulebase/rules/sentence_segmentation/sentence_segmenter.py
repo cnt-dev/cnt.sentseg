@@ -6,7 +6,8 @@ import re
 
 import ahocorasick
 
-from cnt.rulebase import workflow, const, utils
+from cnt.rulebase import workflow, const
+from cnt.rulebase.rules.sentence_segmentation import const as sentseg_const
 
 
 def _build_ac_automation(keys: List[str]) -> Any:
@@ -90,12 +91,7 @@ class SentenceValidCharacterLabeler(workflow.IntervalLabeler):
     """
 
     SENTENCE_VALID_CHARS_PATTERN = workflow.re_pattern_from_intervals(
-            utils.sorted_chain(
-                    const.ITV_CHINESE_CHARS,
-                    const.ITV_ENGLISH_CHARS,
-                    const.ITV_DIGITS,
-                    const.ITV_DELIMITERS,
-            ))
+            sentseg_const.SENTENCE_VALID_CHARS)
 
     def initialize_intervals(self) -> workflow.IntervalGeneratorType:
         return (match.span()

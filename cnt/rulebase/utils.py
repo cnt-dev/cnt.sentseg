@@ -1,12 +1,7 @@
-"""Utils functions"""
+"""Utils functions (DEPRECATED)"""
 import itertools
 import bisect
 from typing import Iterable, List, Tuple, Callable
-
-
-def sorted_chain(*ranges: Iterable[Tuple[int, int]]) -> List[Tuple[int, int]]:
-    """Chain & sort ranges."""
-    return sorted(itertools.chain(*ranges))
 
 
 def generate_range_checker(sorted_intervals: List[Tuple[int, int]]) -> Callable[[str], bool]:
@@ -27,15 +22,3 @@ def generate_range_checker(sorted_intervals: List[Tuple[int, int]]) -> Callable[
         return sorted_intervals[idx][0] <= code_point <= sorted_intervals[idx][1]
 
     return _char_in_range
-
-
-def fullwidth_to_halfwidth(seq: str) -> str:
-    """Conver fullwith chars to halfwidth."""
-
-    def convert(char: str) -> str:
-        code_point = ord(char)
-        if not 0xFF01 <= code_point <= 0xFF5E:
-            return char
-        return chr(code_point - 0xFEE0)
-
-    return ''.join(map(convert, seq))

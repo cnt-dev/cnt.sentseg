@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     cnt.rulebase.const
+    cnt.rulebase.rules
     cnt.rulebase.workflow
 
 Submodules
@@ -17,7 +18,6 @@ Submodules
    cnt.rulebase.char_replacer
    cnt.rulebase.delimiter_segmenter
    cnt.rulebase.segmenter_common
-   cnt.rulebase.sentence_segmenter
    cnt.rulebase.utils
 
 Module contents

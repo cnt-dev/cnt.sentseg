@@ -2,7 +2,7 @@
 Consts for detecting sentence endings.
 """
 from typing import Union, Iterable, List, Any, Optional
-from cnt.rulebase import utils
+from cnt.rulebase.const import utils
 
 
 def _flatten_nested(seq: Iterable[Any], ret: Optional[List[Any]] = None) -> List[Any]:
