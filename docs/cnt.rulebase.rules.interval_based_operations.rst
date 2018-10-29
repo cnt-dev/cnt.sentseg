@@ -6,6 +6,7 @@ Submodules
 
 .. toctree::
 
+   cnt.rulebase.rules.interval_based_operations.basic_operation
    cnt.rulebase.rules.interval_based_operations.interval_based_collector
    cnt.rulebase.rules.interval_based_operations.interval_based_replacer
 
