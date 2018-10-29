@@ -7,7 +7,7 @@ from cnt.rulebase import workflow
 from cnt.rulebase.rules.interval_based_operations.basic_operation import IntervalBasedOperation
 
 
-class _IntervalBasedOperationOutputGenerator(workflow.BasicOutputGenerator):
+class _IntervalBasedCollectorOutputGenerator(workflow.BasicOutputGenerator):
 
     def _result(self) -> workflow.CommonOutputLazyType:
         while True:
@@ -35,13 +35,13 @@ class _IntervalBasedOperationOutputGenerator(workflow.BasicOutputGenerator):
         raise NotImplementedError()
 
 
-class IntervalBasedOperationOutputGeneratorLazy(_IntervalBasedOperationOutputGenerator):
+class IntervalBasedCollectorOutputGeneratorLazy(_IntervalBasedCollectorOutputGenerator):
 
     def result(self) -> workflow.CommonOutputLazyType:
         return self._result()
 
 
-class IntervalBasedOperationOutputGenerator(_IntervalBasedOperationOutputGenerator):
+class IntervalBasedCollectorOutputGenerator(_IntervalBasedCollectorOutputGenerator):
 
     def result(self) -> workflow.CommonOutputType:
         return list(self._result())
@@ -49,5 +49,5 @@ class IntervalBasedOperationOutputGenerator(_IntervalBasedOperationOutputGenerat
 
 class IntervalBasedCollector(IntervalBasedOperation):
 
-    OUTPUT_GENERATOR_LAZY = IntervalBasedOperationOutputGeneratorLazy
-    OUTPUT_GENERATOR = IntervalBasedOperationOutputGenerator
+    OUTPUT_GENERATOR_LAZY = IntervalBasedCollectorOutputGeneratorLazy
+    OUTPUT_GENERATOR = IntervalBasedCollectorOutputGenerator
