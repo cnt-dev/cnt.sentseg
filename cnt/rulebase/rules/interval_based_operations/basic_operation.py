@@ -32,9 +32,8 @@ def _generate_interval_labeler_class() -> Type[workflow.IntervalLabeler]:
     return DerivedIntervalLabeler
 
 
-class IntervalBasedOperation:
+class BasicIntervalBasedOperation:
 
-    OUTPUT_GENERATOR_LAZY = workflow.BasicOutputGenerator
     OUTPUT_GENERATOR = workflow.BasicOutputGenerator
 
     def __init__(self, intervals: List[workflow.IntervalType]):
@@ -42,20 +41,22 @@ class IntervalBasedOperation:
         self.sequential_labeler_class = _generate_interval_labeler_class()
         self.sequential_labeler_class.initialize_by_intervals(intervals)
 
-        # Workflow.
-        self.interval_based_workflow_lazy = self._generate_workflow(lazy=True)
-        self.interval_based_workflow = self._generate_workflow(lazy=False)
+        # OutputGenerator.
+        self._output_generator_class = workflow.BasicOutputGenerator
+        self.initialize_output_generator_class()
 
-    def _generate_workflow(self, lazy: bool) -> workflow.BasicWorkflow:
+        # Workflow.
+        self.interval_based_workflow = self._generate_workflow()
+
+    def initialize_output_generator_class(self) -> None:
+        """
+        Derived class should override this method by initializing ``self._output_generator_class``.
+        """
+        raise NotImplementedError()
+
+    def _generate_workflow(self) -> workflow.BasicWorkflow:
         return workflow.BasicWorkflow(
                 sequential_labeler_classes=[self.sequential_labeler_class],
                 label_processor_class=IntervalBasedOperationLabelProcessor,
-                output_generator_class=(self.OUTPUT_GENERATOR_LAZY
-                                        if lazy else self.OUTPUT_GENERATOR),
+                output_generator_class=self._output_generator_class,
         )
-
-    def result_lazy(self, text: str) -> workflow.CommonOutputLazyType:
-        return self.interval_based_workflow_lazy.result(text)
-
-    def result(self, text) -> workflow.CommonOutputType:
-        return self.interval_based_workflow.result(text)

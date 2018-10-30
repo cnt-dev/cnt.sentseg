@@ -4,7 +4,7 @@ Replace the unicode codepoint specified by intervals with arbitary strings.
 from typing import Any
 
 from cnt.rulebase import workflow
-from cnt.rulebase.rules.interval_based_operations.basic_operation import IntervalBasedOperation
+from cnt.rulebase.rules.interval_based_operations.basic_operation import BasicIntervalBasedOperation
 
 
 class _IntervalBasedReplacerOutputGenerator(workflow.BasicOutputGenerator):
@@ -28,7 +28,19 @@ class IntervalBasedReplacerOutputGenerator(_IntervalBasedReplacerOutputGenerator
         return list(self._result())
 
 
-class IntervalBasedCollector(IntervalBasedOperation):
+class IntervalBasedReplacerLazy(BasicIntervalBasedOperation):
 
-    OUTPUT_GENERATOR_LAZY = IntervalBasedReplacerOutputGeneratorLazy
-    OUTPUT_GENERATOR = IntervalBasedReplacerOutputGenerator
+    def initialize_output_generator_class(self) -> None:
+        self._output_generator_class = IntervalBasedReplacerOutputGeneratorLazy
+
+    def result(self, text: str) -> workflow.CommonOutputLazyType:
+        return self.interval_based_workflow.result(text)
+
+
+class IntervalBasedReplacer(BasicIntervalBasedOperation):
+
+    def initialize_output_generator_class(self) -> None:
+        self._output_generator_class = IntervalBasedReplacerOutputGenerator
+
+    def result(self, text: str) -> workflow.CommonOutputType:
+        return self.interval_based_workflow.result(text)

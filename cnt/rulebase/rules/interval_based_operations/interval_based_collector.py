@@ -4,7 +4,7 @@ Collect the unicode codepoint specified by intervals.
 from typing import Any
 
 from cnt.rulebase import workflow
-from cnt.rulebase.rules.interval_based_operations.basic_operation import IntervalBasedOperation
+from cnt.rulebase.rules.interval_based_operations.basic_operation import BasicIntervalBasedOperation
 
 
 class _IntervalBasedCollectorOutputGenerator(workflow.BasicOutputGenerator):
@@ -47,7 +47,19 @@ class IntervalBasedCollectorOutputGenerator(_IntervalBasedCollectorOutputGenerat
         return list(self._result())
 
 
-class IntervalBasedCollector(IntervalBasedOperation):
+class IntervalBasedCollectorLazy(BasicIntervalBasedOperation):
 
-    OUTPUT_GENERATOR_LAZY = IntervalBasedCollectorOutputGeneratorLazy
-    OUTPUT_GENERATOR = IntervalBasedCollectorOutputGenerator
+    def initialize_output_generator_class(self) -> None:
+        self._output_generator_class = IntervalBasedCollectorOutputGeneratorLazy
+
+    def result(self, text: str) -> workflow.CommonOutputLazyType:
+        return self.interval_based_workflow.result(text)
+
+
+class IntervalBasedCollector(BasicIntervalBasedOperation):
+
+    def initialize_output_generator_class(self) -> None:
+        self._output_generator_class = IntervalBasedCollectorOutputGenerator
+
+    def result(self, text: str) -> workflow.CommonOutputType:
+        return self.interval_based_workflow.result(text)
