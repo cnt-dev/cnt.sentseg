@@ -1,46 +1,87 @@
 """
 Replace the unicode codepoint specified by intervals with arbitary strings.
 """
-from typing import Any
+from typing import Callable, Generator, List, Tuple
 
 from cnt.rulebase import workflow
-from cnt.rulebase.rules.interval_based_operations.basic_operation import BasicIntervalBasedOperation
+from cnt.rulebase.rules.interval_based_operations.basic_operation import (
+        IntervalBasedOperationOutputGenerator,
+        BasicIntervalBasedOperation,
+)
+
+ResultLazyType = Generator[Tuple[str, bool], None, None]
+ResultType = List[Tuple[str, bool]]
+ReplacerFunctionType = Callable[[str], str]
 
 
-class _IntervalBasedReplacerOutputGenerator(workflow.BasicOutputGenerator):
+#pylint: disable=W0223
+class _IntervalBasedReplacerOutputGenerator(IntervalBasedOperationOutputGenerator):
 
-    def _result(self) -> workflow.CommonOutputLazyType:
-        pass
+    def _result(self) -> ResultLazyType:
+        """
+        ``self.config.replacer_function``(``Callable[[str], str]``) must exists.
+        """
+        if not hasattr(self.config, 'replacer_function'):
+            raise NotImplementedError()
 
-    def result(self) -> Any:
-        raise NotImplementedError()
+        for interval, label in self.continuous_intervals():
+            start, end = interval
+            segment = self.input_sequence[start:end]
+            if label:
+                segment = self.config.replacer_function(segment)
+            yield segment, label
 
 
 class IntervalBasedReplacerOutputGeneratorLazy(_IntervalBasedReplacerOutputGenerator):
 
-    def result(self) -> workflow.CommonOutputLazyType:
+    def result(self) -> ResultLazyType:
         return self._result()
 
 
 class IntervalBasedReplacerOutputGenerator(_IntervalBasedReplacerOutputGenerator):
 
-    def result(self) -> workflow.CommonOutputType:
+    def result(self) -> ResultType:
         return list(self._result())
 
 
-class IntervalBasedReplacerLazy(BasicIntervalBasedOperation):
+class IntervalBasedReplacerConfig(workflow.BasicConfig):
+
+    def __init__(self, replacer_function: ReplacerFunctionType):
+        self.replacer_function = replacer_function
+
+
+#pylint: disable=W0223
+class IntervalBasedReplacerOperation(BasicIntervalBasedOperation):
+
+    def __init__(self, intervals: List[workflow.IntervalType],
+                 replacer_function: ReplacerFunctionType):
+        super().__init__(intervals)
+        self.config = IntervalBasedReplacerConfig(replacer_function=replacer_function)
+
+
+class IntervalBasedReplacerLazy(IntervalBasedReplacerOperation):
 
     def initialize_output_generator_class(self) -> None:
         self._output_generator_class = IntervalBasedReplacerOutputGeneratorLazy
 
-    def result(self, text: str) -> workflow.CommonOutputLazyType:
-        return self.interval_based_workflow.result(text)
+    def result(self, text: str) -> ResultLazyType:
+        return self.interval_based_workflow.result(text, self.config)
 
 
-class IntervalBasedReplacer(BasicIntervalBasedOperation):
+class IntervalBasedReplacer(IntervalBasedReplacerOperation):
 
     def initialize_output_generator_class(self) -> None:
         self._output_generator_class = IntervalBasedReplacerOutputGenerator
 
-    def result(self, text: str) -> workflow.CommonOutputType:
-        return self.interval_based_workflow.result(text)
+    def result(self, text: str) -> ResultType:
+        return self.interval_based_workflow.result(text, self.config)
+
+
+class IntervalBasedReplacerToString(IntervalBasedReplacerOperation):
+
+    def initialize_output_generator_class(self) -> None:
+        self._output_generator_class = IntervalBasedReplacerOutputGeneratorLazy
+
+    def result(self, text: str) -> str:
+        return ''.join(
+                segment for segment, _ in self.interval_based_workflow.result(text, self.config))

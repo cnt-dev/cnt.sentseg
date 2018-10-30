@@ -1,38 +1,21 @@
 """
 Collect the unicode codepoint specified by intervals.
 """
-from typing import Any
-
 from cnt.rulebase import workflow
-from cnt.rulebase.rules.interval_based_operations.basic_operation import BasicIntervalBasedOperation
+from cnt.rulebase.rules.interval_based_operations.basic_operation import (
+        IntervalBasedOperationOutputGenerator,
+        BasicIntervalBasedOperation,
+)
 
 
-class _IntervalBasedCollectorOutputGenerator(workflow.BasicOutputGenerator):
+#pylint: disable=W0223
+class _IntervalBasedCollectorOutputGenerator(IntervalBasedOperationOutputGenerator):
 
     def _result(self) -> workflow.CommonOutputLazyType:
-        while True:
-            try:
-                index, label = next(self.label_processor_result)
-            except StopIteration:
-                return
-            if not label:
-                continue
-
-            start = index
-            end = -1
-            try:
-                while True:
-                    index, label = next(self.label_processor_result)
-                    if not label:
-                        end = index
-                        break
-            except StopIteration:
-                end = len(self.input_sequence)
-
-            yield self.input_sequence[start:end], (start, end)
-
-    def result(self) -> Any:
-        raise NotImplementedError()
+        for interval, label in self.continuous_intervals():
+            if label:
+                start, end = interval
+                yield self.input_sequence[start:end], interval
 
 
 class IntervalBasedCollectorOutputGeneratorLazy(_IntervalBasedCollectorOutputGenerator):

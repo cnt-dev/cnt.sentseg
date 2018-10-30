@@ -1,7 +1,7 @@
 """
 Chinese sentence segmentation.
 """
-from typing import Any, Union, cast
+from typing import Union, cast
 
 from cnt.rulebase import workflow
 from cnt.rulebase.rules.sentence_segmentation import const as sentseg_const
@@ -127,15 +127,12 @@ class SentenceSegementationLabelProcessor(workflow.BasicLabelProcessor):
             yield start, end
 
 
-# To make type checking happy.
+#pylint: disable=W0223
 class _SentenceSegementationOutputGeneratorLazy(workflow.BasicOutputGenerator):
 
     def _result(self) -> workflow.CommonOutputLazyType:
         return ((self.input_sequence[start:end], (start, end))
                 for start, end in self.label_processor_result)
-
-    def result(self) -> Any:
-        raise NotImplementedError()
 
 
 class SentenceSegementationOutputGeneratorLazy(_SentenceSegementationOutputGeneratorLazy):

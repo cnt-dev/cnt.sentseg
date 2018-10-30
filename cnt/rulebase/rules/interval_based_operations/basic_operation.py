@@ -24,6 +24,40 @@ class IntervalBasedOperationLabelProcessor(workflow.BasicLabelProcessor):
             yield index, marked
 
 
+IntervalWithLabelType = Tuple[workflow.IntervalType, bool]
+IntervalWithLabelGeneratorType = Generator[IntervalWithLabelType, None, None]
+
+
+#pylint: disable=W0223
+class IntervalBasedOperationOutputGenerator(workflow.BasicOutputGenerator):
+
+    def continuous_intervals(self) -> IntervalWithLabelGeneratorType:
+        cur_start = -1
+        cur_label = False
+
+        # Init.
+        try:
+            index, label = next(self.label_processor_result)
+            cur_start = index
+            cur_label = label
+        except StopIteration:
+            return
+
+        while True:
+            try:
+                index, label = next(self.label_processor_result)
+            except StopIteration:
+                break
+
+            if label == cur_label:
+                continue
+            else:
+                yield (cur_start, index), cur_label
+                cur_label = label
+                cur_start = index
+        yield (cur_start, len(self.input_sequence)), cur_label
+
+
 def _generate_interval_labeler_class() -> Type[workflow.IntervalLabeler]:
 
     class DerivedIntervalLabeler(workflow.IntervalLabeler):

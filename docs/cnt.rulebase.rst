@@ -15,7 +15,6 @@ Submodules
 
 .. toctree::
 
-   cnt.rulebase.char_replacer
    cnt.rulebase.delimiter_segmenter
    cnt.rulebase.segmenter_common
    cnt.rulebase.utils
