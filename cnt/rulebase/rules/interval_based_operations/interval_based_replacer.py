@@ -57,7 +57,7 @@ class IntervalBasedReplacerConfig(workflow.BasicConfig):
 #pylint: disable=W0223
 class IntervalBasedReplacerOperation(BasicIntervalBasedOperation):
 
-    def __init__(self, intervals: List[workflow.IntervalType],
+    def __init__(self, intervals: workflow.IntervalListType,
                  replacer_function: ReplacerFunctionType):
         super().__init__(intervals)
         self.config = IntervalBasedReplacerConfig(replacer_function=replacer_function)
