@@ -9,8 +9,12 @@ from cnt.rulebase.rules.interval_based_operations.basic_operation import (
         BasicIntervalBasedOperation,
 )
 
-ResultLazyType = Generator[Tuple[str, bool], None, None]
-ResultType = List[Tuple[str, bool]]
+IntervalWithLabelType = Tuple[workflow.IntervalType, bool]
+ReplacerSegmentType = Tuple[str, IntervalWithLabelType]
+
+ResultLazyType = Generator[ReplacerSegmentType, None, None]
+ResultType = List[ReplacerSegmentType]
+
 ReplacerFunctionType = Callable[[str], str]
 
 
@@ -29,7 +33,7 @@ class _IntervalBasedReplacerOutputGenerator(IntervalBasedOperationOutputGenerato
             segment = self.input_sequence[start:end]
             if label:
                 segment = self.config.replacer_function(segment)
-            yield segment, label
+            yield segment, (interval, label)
 
 
 class IntervalBasedReplacerOutputGeneratorLazy(_IntervalBasedReplacerOutputGenerator):

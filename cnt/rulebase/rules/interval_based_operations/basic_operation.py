@@ -70,7 +70,7 @@ class BasicIntervalBasedOperation:
 
     OUTPUT_GENERATOR = workflow.BasicOutputGenerator
 
-    def __init__(self, intervals: List[workflow.IntervalType]):
+    def __init__(self, intervals: workflow.IntervalListType):
         # Labeler.
         self.sequential_labeler_class = _generate_interval_labeler_class()
         self.sequential_labeler_class.initialize_by_intervals(intervals)

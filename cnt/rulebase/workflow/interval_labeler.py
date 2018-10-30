@@ -3,7 +3,7 @@ from typing import re as BuiltInReType
 import re
 
 from cnt.rulebase.workflow.basic_workflow import BasicSequentialLabeler
-from cnt.rulebase.workflow.type_annotations import IntervalType, IntervalGeneratorType
+from cnt.rulebase.workflow.type_annotations import IntervalType, IntervalListType, IntervalGeneratorType
 
 
 def _next_interval(intervals: IntervalGeneratorType) -> Optional[IntervalType]:
@@ -41,7 +41,7 @@ class IntervalLabeler(BasicSequentialLabeler):
         cls.ITV_RE_PATTERN = re.compile(pattern, re.UNICODE)
 
     @classmethod
-    def initialize_by_intervals(cls, intervals: List[IntervalType]) -> None:
+    def initialize_by_intervals(cls, intervals: IntervalListType) -> None:
         """
         Convert intervals to regular expression pattern.
 

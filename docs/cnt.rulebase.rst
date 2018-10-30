@@ -10,15 +10,6 @@ Subpackages
     cnt.rulebase.rules
     cnt.rulebase.workflow
 
-Submodules
-----------
-
-.. toctree::
-
-   cnt.rulebase.delimiter_segmenter
-   cnt.rulebase.segmenter_common
-   cnt.rulebase.utils
-
 Module contents
 ---------------
 
