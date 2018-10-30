@@ -1,7 +1,7 @@
 """
 Collect the unicode codepoint specified by intervals.
 """
-from typing import Type, Generator, List, Tuple
+from typing import Type, Generator, Tuple
 
 from cnt.rulebase import workflow
 

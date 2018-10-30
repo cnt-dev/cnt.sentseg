@@ -1,7 +1,7 @@
 """
 TODO
 """
-from typing import Iterable, Union, Tuple, cast
+from typing import Iterable, Union, Tuple
 from cnt.rulebase import const, workflow
 from cnt.rulebase.rules.interval_based_operations import (
         interval_based_collector as itb_coll,
